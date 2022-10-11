@@ -1,5 +1,7 @@
 package uk.shakhzod.gamedrawing.di
 
+import android.app.Application
+import android.content.res.Resources
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -66,4 +68,7 @@ object AppModule {
                 get() = Dispatchers.Default
         }
     }
+
+    @Provides
+    fun provideResource(application: Application) : Resources = application.resources
 }
