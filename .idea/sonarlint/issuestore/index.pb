@@ -11,8 +11,6 @@ l
 build.gradle,f/0/f07866736216be0ee2aba49e392191aeae700a35
 @
 app/build.gradle,f/4/f4a01d6a4fcb971362ec00a83903fd3902f52164
-P
- app/src/main/AndroidManifest.xml,8/c/8c55c3ccc257e5907959013f99656e4c8ec3903e
 t
 Dapp/src/main/java/uk/shakhzod/gamedrawing/util/DispatcherProvider.kt,b/2/b279158e5a9744e39c7377138326a6c1f1345db6
 o
@@ -23,3 +21,21 @@ o
 ?app/src/main/java/uk/shakhzod/gamedrawing/DrawingApplication.kt,3/3/33af6c6277d2128075f555bd9c075ba21374b37e
 j
 :app/src/main/java/uk/shakhzod/gamedrawing/util/Resource.kt,5/1/51641ed1f2c3e5a2dd24d19aff824844832ceb6a
+|
+Lapp/src/main/java/uk/shakhzod/gamedrawing/util/connection/InternetChecker.kt,7/d/7d85358229ca28e00a204d2f20c448a4119dcbc5
+w
+Gapp/src/main/java/uk/shakhzod/gamedrawing/util/connection/Connection.kt,8/5/853d678c366b0fe4532343c59a7362dcc47b2e2b
+w
+Gapp/src/main/java/uk/shakhzod/gamedrawing/ui/drawing/DrawingActivity.kt,7/e/7e5450ab24baacdad70496e5ad600edb1a9ce674
+s
+Capp/src/main/java/uk/shakhzod/gamedrawing/ui/setup/SetupActivity.kt,c/8/c8c34087bd236485302c19f54c1388ae0eda35e9
+t
+Dapp/src/main/java/uk/shakhzod/gamedrawing/util/extensions/ViewExt.kt,2/0/20a1fb3cf796a49c08bbc50c1f02cf2f0b88215e
+x
+Happ/src/main/java/uk/shakhzod/gamedrawing/util/extensions/FragmentExt.kt,1/4/148017ef9277b68eccf4685507f3594fa960f3fc
+€
+Papp/src/main/java/uk/shakhzod/gamedrawing/ui/setup/fragments/UsernameFragment.kt,3/5/35bad725432194d1f611595612ab011bb4faaa0d
+‚
+Rapp/src/main/java/uk/shakhzod/gamedrawing/ui/setup/fragments/SelectRoomFragment.kt,2/4/247361b17753eb8605bdc2ab192ee8c38ac75fa1
+~
+Napp/src/main/java/uk/shakhzod/gamedrawing/repository/DefaultSetupRepository.kt,c/a/ca12b7a3ac93fba558467b3d00621cc55adc37e1

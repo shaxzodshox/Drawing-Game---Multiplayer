@@ -52,7 +52,7 @@ class RoomAdapter @Inject constructor() : RecyclerView.Adapter<RoomAdapter.RoomV
         val room = rooms[position]
         holder.binding.apply {
             tvRoomName.text = room.name
-            val playerCountText = "${room.playerCount}/${room.maxPlayers}"
+            val playerCountText = "${room.playerCount}/ ${room.maxPlayers}"
             tvRoomPersonCount.text = playerCountText
 
             root.onClick {
