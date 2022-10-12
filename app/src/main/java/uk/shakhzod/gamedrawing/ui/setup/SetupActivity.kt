@@ -3,8 +3,10 @@ package uk.shakhzod.gamedrawing.ui.setup
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import dagger.hilt.android.AndroidEntryPoint
 import uk.shakhzod.gamedrawing.databinding.ActivitySetupBinding
 
+@AndroidEntryPoint
 class SetupActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySetupBinding
