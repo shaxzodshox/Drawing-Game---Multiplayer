@@ -1,6 +1,7 @@
 package uk.shakhzod.gamedrawing.repository
 
 import android.content.res.Resources
+import android.util.Log
 import androidx.annotation.StringRes
 import retrofit2.HttpException
 import uk.shakhzod.gamedrawing.R
@@ -33,7 +34,7 @@ class DefaultSetupRepository @Inject constructor(
             return Resource.Error(string(R.string.check_internet_connection))
         }
 
-        return if(response.isSuccessful && response.body()?.successful != true){
+        return if(response.isSuccessful && response.body()?.successful == true){
             Resource.Success(Unit)
         }else if(response.body()?.successful == false){
             Resource.Error(response.body()!!.message!!)
@@ -73,7 +74,7 @@ class DefaultSetupRepository @Inject constructor(
             return Resource.Error(string(R.string.check_internet_connection))
         }
 
-        return if(response.isSuccessful && response.body()?.successful != true){
+        return if(response.isSuccessful && response.body()?.successful == true){
             Resource.Success(Unit)
         }else if(response.body()?.successful == false){
             Resource.Error(response.body()!!.message!!)

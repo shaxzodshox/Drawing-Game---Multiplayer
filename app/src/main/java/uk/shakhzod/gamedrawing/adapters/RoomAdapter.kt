@@ -29,11 +29,11 @@ class RoomAdapter @Inject constructor() : RecyclerView.Adapter<RoomAdapter.RoomV
             override fun getNewListSize(): Int = newDataset.size
 
             override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                return rooms[oldItemPosition] == rooms[newItemPosition]
+                return rooms[oldItemPosition] == newDataset[newItemPosition]
             }
 
             override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                return rooms[oldItemPosition] == rooms[newItemPosition]
+                return rooms[oldItemPosition] == newDataset[newItemPosition]
             }
         })
         withContext(Dispatchers.Main){

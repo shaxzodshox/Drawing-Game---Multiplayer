@@ -33,9 +33,3 @@ t
 Dapp/src/main/java/uk/shakhzod/gamedrawing/util/extensions/ViewExt.kt,2/0/20a1fb3cf796a49c08bbc50c1f02cf2f0b88215e
 x
 Happ/src/main/java/uk/shakhzod/gamedrawing/util/extensions/FragmentExt.kt,1/4/148017ef9277b68eccf4685507f3594fa960f3fc
-€
-Papp/src/main/java/uk/shakhzod/gamedrawing/ui/setup/fragments/UsernameFragment.kt,3/5/35bad725432194d1f611595612ab011bb4faaa0d
-‚
-Rapp/src/main/java/uk/shakhzod/gamedrawing/ui/setup/fragments/SelectRoomFragment.kt,2/4/247361b17753eb8605bdc2ab192ee8c38ac75fa1
-~
-Napp/src/main/java/uk/shakhzod/gamedrawing/repository/DefaultSetupRepository.kt,c/a/ca12b7a3ac93fba558467b3d00621cc55adc37e1

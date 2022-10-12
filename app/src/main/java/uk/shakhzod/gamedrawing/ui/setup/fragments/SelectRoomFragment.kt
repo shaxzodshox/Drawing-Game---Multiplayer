@@ -5,7 +5,7 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -13,12 +13,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import uk.shakhzod.gamedrawing.R
 import uk.shakhzod.gamedrawing.adapters.RoomAdapter
 import uk.shakhzod.gamedrawing.databinding.FragmentSelectRoomBinding
-import uk.shakhzod.gamedrawing.ui.setup.SetupViewModel
+import uk.shakhzod.gamedrawing.ui.setup.viewmodel.SelectRoomViewModel
 import uk.shakhzod.gamedrawing.util.Constants.SEARCH_DELAY
 import uk.shakhzod.gamedrawing.util.extensions.navigateSafely
 import uk.shakhzod.gamedrawing.util.extensions.onClick
@@ -34,12 +33,14 @@ class SelectRoomFragment : Fragment(R.layout.fragment_select_room) {
     private var _binding: FragmentSelectRoomBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: SetupViewModel by activityViewModels()
+    private val viewModel: SelectRoomViewModel by viewModels()
 
     private val args: SelectRoomFragmentArgs by navArgs()
 
     @Inject
     lateinit var roomAdapter: RoomAdapter
+
+    private var updateRoomsJob: Job? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -84,7 +85,7 @@ class SelectRoomFragment : Fragment(R.layout.fragment_select_room) {
     private fun listenToEvents() = lifecycleScope.launchWhenStarted {
         viewModel.setupEvent.collect { event ->
             when (event) {
-                is SetupViewModel.SetupEvent.JoinRoomEvent -> {
+                is SelectRoomViewModel.SetupEvent.JoinRoomEvent -> {
                     findNavController().navigateSafely(
                         R.id.action_selectRoomFragment_to_drawingActivity,
                         args = Bundle().apply {
@@ -93,11 +94,11 @@ class SelectRoomFragment : Fragment(R.layout.fragment_select_room) {
                         }
                     )
                 }
-                is SetupViewModel.SetupEvent.JoinRoomErrorEvent -> {
+                is SelectRoomViewModel.SetupEvent.JoinRoomErrorEvent -> {
                     snackbar(event.error)
                 }
 
-                is SetupViewModel.SetupEvent.GetRoomErrorEvent -> {
+                is SelectRoomViewModel.SetupEvent.GetRoomErrorEvent -> {
                     binding.apply {
                         roomsProgressBar.isVisible = false
                         tvNoRoomsFound.isVisible = false
@@ -113,15 +114,17 @@ class SelectRoomFragment : Fragment(R.layout.fragment_select_room) {
     private fun subscribeToObserves() = lifecycleScope.launchWhenStarted {
         viewModel.rooms.collect { event ->
             when (event) {
-                is SetupViewModel.SetupEvent.GetRoomLoadingEvent -> {
+                is SelectRoomViewModel.SetupEvent.GetRoomLoadingEvent -> {
                     binding.roomsProgressBar.isVisible = true
                 }
-                is SetupViewModel.SetupEvent.GetRoomEvent -> {
+                is SelectRoomViewModel.SetupEvent.GetRoomEvent -> {
                     binding.roomsProgressBar.isVisible = false
                     val isRoomsEmpty = event.rooms.isEmpty()
                     binding.tvNoRoomsFound.isVisible = isRoomsEmpty
                     binding.ivNoRoomsFound.isVisible = isRoomsEmpty
-                    lifecycleScope.launch {
+
+                    updateRoomsJob?.cancel()
+                    updateRoomsJob = lifecycleScope.launch {
                         roomAdapter.updateDataset(event.rooms)
                     }
                 }
