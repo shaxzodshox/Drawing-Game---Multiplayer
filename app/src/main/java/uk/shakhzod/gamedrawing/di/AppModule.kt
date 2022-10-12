@@ -1,14 +1,18 @@
 package uk.shakhzod.gamedrawing.di
 
 import android.app.Application
+import android.content.Context
 import android.content.res.Resources
+import androidx.datastore.dataStore
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -18,6 +22,8 @@ import uk.shakhzod.gamedrawing.util.Constants.HTTP_BASE_URL
 import uk.shakhzod.gamedrawing.util.Constants.HTTP_BASE_URL_LOCALHOST
 import uk.shakhzod.gamedrawing.util.Constants.USE_LOCALHOST
 import uk.shakhzod.gamedrawing.util.DispatcherProvider
+import uk.shakhzod.gamedrawing.util.clientId
+import uk.shakhzod.gamedrawing.util.datastore
 import javax.inject.Singleton
 
 /**
@@ -30,12 +36,25 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideOkHttpClient(clientId: String): OkHttpClient {
         return OkHttpClient.Builder()
+            .addInterceptor { chain ->
+                val url = chain.request().url.newBuilder().addQueryParameter("client_id", clientId)
+                    .build()
+
+                val request = chain.request().newBuilder().url(url).build()
+                chain.proceed(request)
+            }
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })
             .build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideClientId(@ApplicationContext context: Context): String {
+        return runBlocking { context.datastore.clientId() }
     }
 
     @Singleton
@@ -70,5 +89,5 @@ object AppModule {
     }
 
     @Provides
-    fun provideResource(application: Application) : Resources = application.resources
+    fun provideResource(application: Application): Resources = application.resources
 }
