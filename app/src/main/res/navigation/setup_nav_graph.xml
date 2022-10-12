@@ -47,7 +47,7 @@
     </fragment>
     <activity
         android:id="@+id/drawingActivity"
-        android:name="uk.shakhzod.gamedrawing.ui.setup.drawing.DrawingActivity"
+        android:name="uk.shakhzod.gamedrawing.ui.drawing.DrawingActivity"
         android:label="DrawingActivity"
         tools:layout="@layout/activity_drawing"
         >

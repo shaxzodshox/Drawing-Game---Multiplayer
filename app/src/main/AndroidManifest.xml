@@ -30,7 +30,7 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name=".ui.setup.drawing.DrawingActivity"
+        <activity android:name=".ui.drawing.DrawingActivity"
             android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait"
             />

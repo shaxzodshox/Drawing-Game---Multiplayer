@@ -1,4 +1,4 @@
-package uk.shakhzod.gamedrawing.ui.setup.drawing
+package uk.shakhzod.gamedrawing.ui.drawing
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
