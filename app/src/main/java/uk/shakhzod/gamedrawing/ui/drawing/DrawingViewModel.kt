@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import uk.shakhzod.gamedrawing.R
+import uk.shakhzod.gamedrawing.data.remote.ws.DrawingApi
 import uk.shakhzod.gamedrawing.util.DispatcherProvider
 import javax.inject.Inject
 
@@ -15,6 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DrawingViewModel @Inject constructor(
+    private val drawingApi: DrawingApi,
     private val dispatchers: DispatcherProvider,
     private val gson : Gson
 ) : ViewModel() {

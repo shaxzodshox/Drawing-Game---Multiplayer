@@ -28,8 +28,6 @@ Dapp/src/main/java/uk/shakhzod/gamedrawing/util/extensions/ViewExt.kt,2/0/20a1f
 x
 Happ/src/main/java/uk/shakhzod/gamedrawing/util/extensions/FragmentExt.kt,1/4/148017ef9277b68eccf4685507f3594fa960f3fc
 p
-@app/src/main/java/uk/shakhzod/gamedrawing/di/ConnectionModule.kt,7/b/7b2dfde71c0282dc4e246f73d9e5ff22992f4d3a
-p
 @app/src/main/java/uk/shakhzod/gamedrawing/di/RepositoryModule.kt,4/a/4a42bebf888a309b5ea6207e852b36bbbae30460
 w
 Gapp/src/main/java/uk/shakhzod/gamedrawing/repository/SetupRepository.kt,2/4/24249011f7a790202a09f7d6fb61b1511931f078
@@ -43,13 +41,3 @@ Rapp/src/main/java/uk/shakhzod/gamedrawing/ui/setup/fragments/SelectRoomFragment
 app/build.gradle,f/4/f4a01d6a4fcb971362ec00a83903fd3902f52164
 o
 ?app/src/main/java/uk/shakhzod/gamedrawing/util/DataStoreUtil.kt,7/7/775ce8d4f3b1eb2cd6bf2781d573b12aaa96fe3d
-‚
-Rapp/src/main/java/uk/shakhzod/gamedrawing/ui/setup/fragments/CreateRoomFragment.kt,f/d/fd54c845eb38ca744b0a65e8f19c970b53c48f60
-€
-Papp/src/main/java/uk/shakhzod/gamedrawing/ui/setup/fragments/UsernameFragment.kt,3/5/35bad725432194d1f611595612ab011bb4faaa0d
-q
-Aapp/src/main/java/uk/shakhzod/gamedrawing/adapters/RoomAdapter.kt,b/1/b1a0c1e887c5674ba7414b2189d809d3d8abd95f
-i
-9app/src/main/java/uk/shakhzod/gamedrawing/di/AppModule.kt,5/7/573bf25a0a5e909c6616755280432601ebddadfd
-ƒ
-Sapp/src/main/java/uk/shakhzod/gamedrawing/ui/setup/viewmodel/CreateRoomViewModel.kt,3/5/35fd703852ff26d3b5b4495be024fd85a6bf8353

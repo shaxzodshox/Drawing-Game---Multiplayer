@@ -5,6 +5,10 @@ import android.content.Context
 import android.content.res.Resources
 import androidx.datastore.dataStore
 import com.google.gson.Gson
+import com.tinder.scarlet.Scarlet
+import com.tinder.scarlet.lifecycle.android.AndroidLifecycle
+import com.tinder.scarlet.retry.LinearBackoffStrategy
+import com.tinder.scarlet.websocket.okhttp.newWebSocketFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,9 +22,15 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import uk.shakhzod.gamedrawing.data.remote.api.SetupApi
+import uk.shakhzod.gamedrawing.data.remote.ws.CustomJsonMessageAdapter
+import uk.shakhzod.gamedrawing.data.remote.ws.DrawingApi
+import uk.shakhzod.gamedrawing.data.remote.ws.FlowStreamAdapter
 import uk.shakhzod.gamedrawing.util.Constants.HTTP_BASE_URL
 import uk.shakhzod.gamedrawing.util.Constants.HTTP_BASE_URL_LOCALHOST
+import uk.shakhzod.gamedrawing.util.Constants.RECONNECT_INTERVAL
 import uk.shakhzod.gamedrawing.util.Constants.USE_LOCALHOST
+import uk.shakhzod.gamedrawing.util.Constants.WS_BASE_URL
+import uk.shakhzod.gamedrawing.util.Constants.WS_BASE_URL_LOCALHOST
 import uk.shakhzod.gamedrawing.util.DispatcherProvider
 import uk.shakhzod.gamedrawing.util.clientId
 import uk.shakhzod.gamedrawing.util.datastore
@@ -55,6 +65,27 @@ object AppModule {
     @Provides
     fun provideClientId(@ApplicationContext context: Context): String {
         return runBlocking { context.datastore.clientId() }
+    }
+
+    @Singleton
+    @Provides
+    fun provideDrawingApi(
+        app: Application,
+        okHttpClient: OkHttpClient,
+        gson: Gson
+    ): DrawingApi {
+        return Scarlet.Builder()
+            .backoffStrategy(LinearBackoffStrategy(RECONNECT_INTERVAL))
+            .lifecycle(AndroidLifecycle.ofApplicationForeground(app))
+            .webSocketFactory(
+                okHttpClient.newWebSocketFactory(
+                    if (USE_LOCALHOST) WS_BASE_URL_LOCALHOST else WS_BASE_URL
+                )
+            )
+            .addStreamAdapterFactory(FlowStreamAdapter.Factory)
+            .addMessageAdapterFactory(CustomJsonMessageAdapter.Factory(gson))
+            .build()
+            .create()
     }
 
     @Singleton
