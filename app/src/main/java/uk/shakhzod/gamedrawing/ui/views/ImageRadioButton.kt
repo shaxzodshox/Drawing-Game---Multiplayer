@@ -49,7 +49,6 @@ class ImageRadioButton @JvmOverloads constructor(
     }
 
     override fun onDraw(canvas: Canvas?) {
-        super.onDraw(canvas)
         canvas?.let {
             if (!isChecked) {
                 uncheckedDrawable?.setBounds(
