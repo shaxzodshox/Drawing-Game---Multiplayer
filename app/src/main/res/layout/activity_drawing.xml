@@ -30,42 +30,56 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/drawingView">
 
-            <View
+            <uk.shakhzod.gamedrawing.ui.views.ColorRadioButton
                 android:id="@+id/rbRed"
                 android:layout_width="40dp"
-                android:layout_height="40dp" />
+                android:layout_height="40dp"
+                app:buttonColor="@color/red"
+                />
 
-            <View
+            <uk.shakhzod.gamedrawing.ui.views.ColorRadioButton
                 android:id="@+id/rbGreen"
                 android:layout_width="40dp"
-                android:layout_height="40dp"/>
+                android:layout_height="40dp"
+                app:buttonColor="@color/green"
+                />
 
-            <View
+            <uk.shakhzod.gamedrawing.ui.views.ColorRadioButton
                 android:id="@+id/rbBlue"
                 android:layout_width="40dp"
-                android:layout_height="40dp" />
+                android:layout_height="40dp"
+                app:buttonColor="@android:color/holo_blue_dark"
+                />
 
-            <View
+            <uk.shakhzod.gamedrawing.ui.views.ColorRadioButton
                 android:id="@+id/rbOrange"
                 android:layout_width="40dp"
-                android:layout_height="40dp"/>
+                android:layout_height="40dp"
+                app:buttonColor="@color/orange"
+                />
 
-            <View
+            <uk.shakhzod.gamedrawing.ui.views.ColorRadioButton
                 android:id="@+id/rbYellow"
                 android:layout_width="40dp"
-                android:layout_height="40dp" />
+                android:layout_height="40dp"
+                app:buttonColor="@color/yellow"
+                />
 
-            <View
+            <uk.shakhzod.gamedrawing.ui.views.ColorRadioButton
                 android:id="@+id/rbBlack"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:checked="true" />
+                android:checked="true"
+                app:buttonColor="@color/black"
+                />
 
-            <View
+            <uk.shakhzod.gamedrawing.ui.views.ImageRadioButton
                 android:id="@+id/rbEraser"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:padding="6dp"
+                app:uncheckedDrawable="@drawable/ic_eraser_unchecked"
+                app:checkedDrawable="@drawable/ic_eraser_checked"
                 />
 
         </RadioGroup>
@@ -78,7 +92,8 @@
             app:layout_constraintBottom_toBottomOf="@id/colorGroup"
             app:layout_constraintStart_toEndOf="@+id/colorGroup"
             app:layout_constraintTop_toTopOf="@+id/colorGroup"
-            app:srcCompat="@drawable/ic_baseline_undo_24" />
+            app:srcCompat="@drawable/ic_baseline_undo_24"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <ProgressBar
             android:id="@+id/roundTimerProgressBar"
@@ -136,8 +151,9 @@
                 android:id="@+id/ibPlayers"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
                 app:srcCompat="@drawable/ic_person"
-                android:background="@android:color/transparent"/>
+                tools:ignore="SpeakableTextPresentCheck" />
 
             <ImageButton
                 android:id="@+id/ibMic"
