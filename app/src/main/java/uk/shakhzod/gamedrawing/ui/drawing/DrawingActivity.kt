@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -21,6 +22,7 @@ import com.tinder.scarlet.WebSocket
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import uk.shakhzod.gamedrawing.R
+import uk.shakhzod.gamedrawing.data.remote.ws.models.DrawAction
 import uk.shakhzod.gamedrawing.data.remote.ws.models.GameError
 import uk.shakhzod.gamedrawing.data.remote.ws.models.JoinRoomHandshake
 import uk.shakhzod.gamedrawing.databinding.ActivityDrawingBinding
@@ -57,6 +59,7 @@ class DrawingActivity : AppCompatActivity() {
 
         toggle = ActionBarDrawerToggle(this, binding.root, R.string.open, R.string.close)
         toggle.syncState()
+        binding.drawingView.roomName = args.roomName
 
         val header = layoutInflater.inflate(R.layout.nav_drawer_header, binding.navView)
         rvPlayers = header.findViewById(R.id.rvPlayers)
@@ -68,26 +71,42 @@ class DrawingActivity : AppCompatActivity() {
         }
 
         binding.root.addDrawerListener(OnDrawerClosedListener {
-             binding.root.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            binding.root.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         })
 
         binding.colorGroup.setOnCheckedChangeListener { _, checkedId ->
             viewModel.checkRadioButton(checkedId)
         }
+        binding.drawingView.setOnDrawListener {
+            if (binding.drawingView.isUserDrawing) {
+                viewModel.sendBaseModel(it)
+            }
+        }
+        binding.ibUndo.onClick {
+            if (binding.drawingView.isUserDrawing){
+                binding.drawingView.undo()
+                viewModel.sendBaseModel(DrawAction(DrawAction.ACTION_UNDO))
+            }
+        }
     }
 
-    private fun selectColor(color: Int){
+    private fun selectColor(color: Int) {
         binding.drawingView.setColor(color)
         binding.drawingView.setThickness(DEFAULT_PAINT_THICKNESS)
     }
 
-    private fun subsribeToUiStateUpdates(){
+    private fun subsribeToUiStateUpdates() {
         lifecycleScope.launchWhenStarted {
-            viewModel.selectedColorButtonId.collect{ id ->
+            viewModel.selectedColorButtonId.collect { id ->
                 binding.colorGroup.check(id)
-                when(id){
+                when (id) {
                     R.id.rbBlack -> selectColor(Color.BLACK)
-                    R.id.rbBlue -> selectColor(ContextCompat.getColor(this@DrawingActivity,android.R.color.holo_blue_dark))
+                    R.id.rbBlue -> selectColor(
+                        ContextCompat.getColor(
+                            this@DrawingActivity,
+                            android.R.color.holo_blue_dark
+                        )
+                    )
                     R.id.rbGreen -> selectColor(Color.GREEN)
                     R.id.rbOrange -> selectColor(
                         ContextCompat.getColor(this@DrawingActivity, R.color.orange)
@@ -102,23 +121,42 @@ class DrawingActivity : AppCompatActivity() {
             }
         }
         lifecycleScope.launchWhenStarted {
-            viewModel.connectionProgressBarVisible.collect{ isVisible ->
+            viewModel.connectionProgressBarVisible.collect { isVisible ->
                 binding.connectionProgressBar.isVisible = isVisible
             }
         }
 
         lifecycleScope.launchWhenStarted {
-            viewModel.chooseWordOverlayVisible.collect{ isVisible ->
+            viewModel.chooseWordOverlayVisible.collect { isVisible ->
                 binding.chooseWordOverlay.isVisible = isVisible
             }
         }
     }
 
     private fun listenToSocketEvents() = lifecycleScope.launchWhenStarted {
-        viewModel.socketEvent.collect{ event ->
-            when(event){
+        viewModel.socketEvent.collect { event ->
+            when (event) {
+                is DrawingViewModel.SocketEvent.DrawDataEvent -> {
+                    val drawData = event.data
+                    if (!binding.drawingView.isUserDrawing) {
+                        when (drawData.motionEvent) {
+                            MotionEvent.ACTION_DOWN -> binding.drawingView.startedTouchExternally(
+                                drawData
+                            )
+                            MotionEvent.ACTION_MOVE -> binding.drawingView.movedTouchExternally(
+                                drawData
+                            )
+                            MotionEvent.ACTION_UP -> binding.drawingView.releasedTouchExternally(
+                                drawData
+                            )
+                        }
+                    }
+                }
+                is DrawingViewModel.SocketEvent.UndoEvent -> {
+                    binding.drawingView.undo()
+                }
                 is DrawingViewModel.SocketEvent.GameErrorEvent -> {
-                    when(event.data.errorType){
+                    when (event.data.errorType) {
                         GameError.ERROR_ROOM_NOT_FOUND -> finish()
                     }
                 }
@@ -128,8 +166,8 @@ class DrawingActivity : AppCompatActivity() {
     }
 
     private fun listenToConnectionEvents() = lifecycleScope.launchWhenStarted {
-        viewModel.connectionEvent.collect{ event ->
-            when(event){
+        viewModel.connectionEvent.collect { event ->
+            when (event) {
                 is WebSocket.Event.OnConnectionOpened<*> -> {
                     viewModel.sendBaseModel(
                         JoinRoomHandshake(
@@ -140,7 +178,11 @@ class DrawingActivity : AppCompatActivity() {
                 }
                 is WebSocket.Event.OnConnectionFailed -> {
                     viewModel.setConnectionProgressBarVisibility(false)
-                    Snackbar.make(binding.root, R.string.error_connection_failed, Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(
+                        binding.root,
+                        R.string.error_connection_failed,
+                        Snackbar.LENGTH_LONG
+                    ).show()
                     event.throwable.printStackTrace()
                 }
                 is WebSocket.Event.OnConnectionClosed -> {
@@ -152,7 +194,7 @@ class DrawingActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(toggle.onOptionsItemSelected(item)){
+        if (toggle.onOptionsItemSelected(item)) {
             return true
         }
         return super.onOptionsItemSelected(item)
